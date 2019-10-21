@@ -1,13 +1,15 @@
 import React from 'react';
-class App extends React.Component {
-    render() { 
+import {BrowserRouter, Route} from 'react-router-dom';
+import Home from './Home';
+const App = () => {
         return (
         <div>
-            Hello there!!
-            <h2>This is a business concepts.</h2>
+            <div><BrowserRouter>
+            <Route path="/" exact component={Home}/>
+            </BrowserRouter>
+            </div>
         </div> 
         );
-    }
 }
  
 export default App;
