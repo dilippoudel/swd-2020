@@ -4,6 +4,7 @@ class App extends React.Component {
         return (
         <div>
             Hello there!!
+            <h2>This is a business concepts.</h2>
         </div> 
         );
     }
