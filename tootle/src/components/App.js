@@ -6,12 +6,14 @@ import EditComments from './comments/EditComments';
 import ShowComments from './comments/ShowComments';
 import DeleteComments from './comments/DeleteComments';
 import Header from './Header';
+import HomeContent from './HomeContent';
 const App = () => {
         return (
         <div className="ui container">
             <BrowserRouter>
             <div>
             <Header/>
+            <Route path="/" exact component={HomeContent}/>
             <Route path="/" exact component={ListComments}/>
             <Route path="/comments/new" exact component={CreateComments}/>
             <Route path="/comments/edit" exact component={EditComments}/>
