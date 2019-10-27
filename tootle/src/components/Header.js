@@ -14,6 +14,7 @@ const Header = () => {
                     <About/>
                 </Link>
             </div>
+            
             <div className="right menu">
                 <GoogleAuth/>
             </div>
