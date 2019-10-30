@@ -1,6 +1,8 @@
 import React from 'react';
+import  {connect} from 'react-redux';
+import {signIn, signOut} from '../actions';
 class GoogleAuth extends React.Component {
-    state = { isSignedIn: null, currentUser: null};
+    state = {currentUser: null, imageUrl: null}
     componentDidMount() {
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({
@@ -8,46 +10,51 @@ class GoogleAuth extends React.Component {
                 scope:'email'
             }).then(() => {
                 this.auth = window.gapi.auth2.getAuthInstance();
-                this.setState({ isSignedIn : this.auth.isSignedIn.get() });
+                this.onAuthChange(this.auth.isSignedIn.get());
                 this.auth.isSignedIn.listen(this.onAuthChange);
+            }).then(()=> {
+                this.setState({currentUser: this.auth.currentUser.get().w3.ig});
+                this.setState({imageUrl: this.auth.currentUser.get().w3.getImageUrl()})
             });
         });
     }
-    
-    onAuthChange = () => {
-        this.setState({ 
-            isSignedIn: this.auth.isSignedIn.get()
-        });
-        if(this.state.isSignedIn) 
-        return this.setState({currentUser: this.auth.currentUser.get().w3.ig});
-        else { this.setState({currentUser: null})}
-    }
-    onSignIn = () => {
+    onAuthChange = (isSignedIn) => {
+        if(isSignedIn) {
+            this.props.signIn()
+        }
+        else {
+            this.props.signOut()
+        };
+    };
+    onSignInClick = () => {
         this.auth.signIn();
     }
-    onSignOut = () => {
+    onSignOutClick = () => {
         this.auth.signOut();
     }
     renderAuthButton(){
-        if(this.state.isSignedIn === null){
+        if(this.props.isSignedIn === null){
             return null;
         }
-        else if(this.state.isSignedIn) {
+        else if(this.props.isSignedIn) {
             return (
-                <div className= "ui relaxed divided list">
-                <i className="large middle aligned user icon "/>
-                
-                <button className = "ui red google button" onClick={this.onSignOut}>
-                <i className="google icon"/>
-                Sign out
-                </button>
-                
+                <div className = "left menu">
+                    <div className= "left menu">
+                        <img style={{borderRadius:"50%", width:"50px", position:"relative"}} src = {`${this.state.imageUrl}`} alt="Avatar" />
+                    </div>
+                    <div className= "right menu">
+                    <button className = "ui red google button" onClick={this.onSignOutClick}>
+                    <i className="google icon"/>
+                    Sign out
+                    </button>
+                    </div>
                 </div>
+                
                 )
         }
         else{
             return (
-                <button className = "ui primary google button" onClick={this.onSignIn}>
+                <button className = "ui primary google button" onClick={this.onSignInClick}>
                 <i className="google icon"/>
                 Sign In with Google
             </button>
@@ -63,5 +70,15 @@ class GoogleAuth extends React.Component {
              );
     }
 }
- 
-export default GoogleAuth;
+ const mapStateToProps = (state) => {
+     console.log(state);
+    return {
+        isSignedIn: state.auth.isSignedIn,
+        imageUrl: state.auth.imageUrl,
+        currentUser: state.auth.currentUser
+    }
+ }
+export default connect(
+    mapStateToProps, 
+    {signIn, signOut}
+    )(GoogleAuth);
