@@ -2,7 +2,6 @@ import React from 'react';
 import  {connect} from 'react-redux';
 import {signIn, signOut} from '../actions';
 class GoogleAuth extends React.Component {
-    state = {currentUser: null, imageUrl: null}
     componentDidMount() {
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({
@@ -12,20 +11,22 @@ class GoogleAuth extends React.Component {
                 this.auth = window.gapi.auth2.getAuthInstance();
                 this.onAuthChange(this.auth.isSignedIn.get());
                 this.auth.isSignedIn.listen(this.onAuthChange);
-            }).then(()=> {
-                this.setState({currentUser: this.auth.currentUser.get().w3.ig});
-                this.setState({imageUrl: this.auth.currentUser.get().w3.getImageUrl()})
             });
         });
     }
     onAuthChange = (isSignedIn) => {
         if(isSignedIn) {
-            this.props.signIn()
+            const userDetails = {
+                useerId: this.auth.currentUser.get().getId(),
+                userName: this.auth.currentUser.get().w3.ig,
+                imageUrl:this.auth.currentUser.get().w3.getImageUrl()
+            }
+             this.props.signIn(userDetails);
         }
         else {
             this.props.signOut()
-        };
-    };
+        }
+    }
     onSignInClick = () => {
         this.auth.signIn();
     }
@@ -40,7 +41,11 @@ class GoogleAuth extends React.Component {
             return (
                 <div className = "left menu">
                     <div className= "left menu">
-                        <img style={{borderRadius:"50%", width:"50px", position:"relative"}} src = {`${this.state.imageUrl}`} alt="Avatar" />
+                        <img 
+                        style={{borderRadius:"50%", width:"50px", 
+                        position:"relative"}} 
+                        src = {`${this.props.imageUrl.imageUrl}`} 
+                        alt="Avatar" />
                     </div>
                     <div className= "right menu">
                     <button className = "ui red google button" onClick={this.onSignOutClick}>
@@ -74,8 +79,8 @@ class GoogleAuth extends React.Component {
      console.log(state);
     return {
         isSignedIn: state.auth.isSignedIn,
-        imageUrl: state.auth.imageUrl,
-        currentUser: state.auth.currentUser
+        imageUrl: state.auth.userDetails,
+        //currentUser: state.auth.currentUser
     }
  }
 export default connect(
