@@ -17,7 +17,7 @@ class GoogleAuth extends React.Component {
     onAuthChange = (isSignedIn) => {
         if(isSignedIn) {
             const userDetails = {
-                useerId: this.auth.currentUser.get().getId(),
+                userId: this.auth.currentUser.get().getId(),
                 userName: this.auth.currentUser.get().w3.ig,
                 imageUrl:this.auth.currentUser.get().w3.getImageUrl()
             }
@@ -79,7 +79,6 @@ class GoogleAuth extends React.Component {
     return {
         isSignedIn: state.auth.isSignedIn,
         imageUrl: state.auth.userDetails,
-        //currentUser: state.auth.currentUser
     }
  }
 export default connect(

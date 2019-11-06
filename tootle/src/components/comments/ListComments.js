@@ -1,7 +1,65 @@
 import React from 'react';
-const ListComponents = () => {
-    return(
-        <div>List Components</div>
-    )
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {fetchComments} from '../../actions'
+class ListComments extends React.Component {
+    componentDidMount() {
+        this.props.fetchComments();
+        
+    }
+    renderAdmin(comment){
+        console.log('comment creator '+ comment.userId)
+        console.log('current user '+ this.props.currentUserId)
+        if(comment.userId === this.props.currentUserId) {
+            return (
+            <div className="right floated content">
+                <button className="ui button primary">
+                    Edit
+                </button>
+                <button className="ui button negative">Delete</button>
+            </div>)
+        } 
+    }
+    renderList() {
+        return this.props.comments.map(comment => {
+            return(
+                <div className="item" key={comment.id}>
+                 {this.renderAdmin(comment)}
+                 <div className="content">
+                     <b>{comment.title}</b>
+                 <div className="description">{comment.description}</div>  
+                 </div> 
+                </div>
+            )
+        })
+    }
+
+    renderCreate(){
+        if(this.props.isSignedIn){
+            return(
+                <div style={{textAlign: 'right'}}>
+                    <Link to="/comments/new" className="ui button primary">
+                        Create Comment
+                    </Link>
+                </div>
+            )
+        }
+    }
+    render() { 
+        return (<div>
+            <h2>Comments</h2>
+            <div className="ui celled list">{this.renderList()}</div>
+            {this.renderCreate()}
+        </div>  );
+    }
 }
-export default ListComponents;
+ const mapStateToProps = (state) => {
+     return{
+        comments: Object.values(state.comments),
+        currentUserId: state.auth.userId,
+        isSignedIn: state.auth.isSignedIn
+        }
+ }
+export default connect(mapStateToProps, {
+    fetchComments
+})(ListComments);

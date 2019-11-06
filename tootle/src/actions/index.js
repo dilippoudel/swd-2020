@@ -7,11 +7,12 @@ import {
     EDIT_COMMENT,
     DELETE_COMMENT
 } from './types';
+import history from '../history';
 import axios from 'axios';
 export const signIn = (userDetails) => {
     return {
         type: SIGN_IN, 
-        payload: userDetails
+        payload: userDetails,
         
     };
 };
@@ -22,13 +23,14 @@ export const signOut = () => {
     };
 };
 
-export const createComment = formValues => async dispatch => {
- const response = await axios.post('http://localhost:3001/comments', formValues);
- dispatch({type: CREATE_COMMENT,payloade: response.data
- })
+export const createComment = formValues => async (dispatch, getState) => {
+ const {userId} = getState().auth;
+ const response = await axios.post(`http://localhost:3001/comments`, {...formValues, userId});
+ dispatch({type: CREATE_COMMENT,payload: response.data});
+ history.push('/');
 };
 export const fetchComments = () => async disatch => {
-    const response = await axios.get('http://localhost:3001/comments');
+    const response = await axios.get(`http://localhost:3001/comments`);
     disatch({type: FETCH_COMMENTS, payload: response.data})
 }
 export const fetchComment = (id) => async disatch => {
