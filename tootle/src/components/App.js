@@ -17,7 +17,7 @@ const App = () => {
             <Route path="/" exact component={HomeContent}/>
             <Route path="/" exact component={ListComments}/>
             <Route path="/comments/new" exact component={CreateComments}/>
-            <Route path="/comments/edit" exact component={EditComments}/>
+            <Route path="/comments/edit/:id" exact component={EditComments}/>
             <Route path="/comments/delete" exact component={DeleteComments}/>
             <Route path="/comments/show" exact component={ShowComments}/>
             </div>

@@ -38,8 +38,9 @@ export const fetchComment = (id) => async disatch => {
     disatch({type: FETCH_COMMENT, payload: response.data})
 }
 export const editComment = (id, formValues) => async disatch => {
-    const response = await axios.put(`http://localhost:3001/comments/${id}`, formValues);
-    disatch({type: EDIT_COMMENT, payload: response.data})
+    const response = await axios.patch(`http://localhost:3001/comments/${id}`, formValues);
+    disatch({type: EDIT_COMMENT, payload: response.data});
+    history.push('/')
 }
 export const deleteComment = (id) => async disatch => {
      await axios.delete(`http://localhost:3001/comments/${id}`);

@@ -8,14 +8,10 @@ class ListComments extends React.Component {
         
     }
     renderAdmin(comment){
-        console.log('comment creator '+ comment.userId)
-        console.log('current user '+ this.props.currentUserId)
         if(comment.userId === this.props.currentUserId) {
             return (
             <div className="right floated content">
-                <button className="ui button primary">
-                    Edit
-                </button>
+                <Link to={`/comments/edit/${comment.id}`} className="ui button primary">Edit</Link>
                 <button className="ui button negative">Delete</button>
             </div>)
         } 
