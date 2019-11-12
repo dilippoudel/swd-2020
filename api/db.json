@@ -1,20 +1,5 @@
 {
   "comments": [
-    {
-      "title": "Cost",
-      "description": "the cost is gonna too high",
-      "id": 4
-    },
-    {
-      "title": "Resuse",
-      "description": "This comment is about to refactoring.",
-      "id": 5
-    },
-    {
-      "title": "PATCH",
-      "description": "THIS IS COMING FROM BACKEND API.",
-      "userId": "116145427947914344056",
-      "id": 6
-    }
+    
   ]
 }
