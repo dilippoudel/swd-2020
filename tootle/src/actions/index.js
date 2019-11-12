@@ -44,5 +44,7 @@ export const editComment = (id, formValues) => async disatch => {
 }
 export const deleteComment = (id) => async disatch => {
      await axios.delete(`http://localhost:3001/comments/${id}`);
-    disatch({type: DELETE_COMMENT, payload: id})
+    disatch({type: DELETE_COMMENT, payload: id});
+    history.push('/')
+
 }
